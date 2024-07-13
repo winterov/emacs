@@ -9,11 +9,17 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
+    kotlin("plugin.jpa") version "1.9.22"
 }
 
 dependencies {
-    api(libs.org.springframework.boot.spring.boot.starter)
-    api(project(":properties"))
+    compileOnly(libs.org.springframework.boot.spring.boot.starter)
+    compileOnly(libs.org.springframework.boot.spring.boot.starter.web)
+    compileOnly(libs.org.springframework.boot.spring.boot.starter.validation)
+    compileOnly(libs.jakarta.validation.api)
+    compileOnly(libs.kotlin.stdlib)
+    compileOnly(libs.kotlin.reflect)
+    compileOnly(project(":properties"))
 }
 
 description = "commons"

@@ -8,14 +8,24 @@ io-jsonwebtoken-jjwt-impl = "0.12.6"
 io-jsonwebtoken-jjwt-jackson = "0.12.6"
 org-postgresql-postgresql = "42.7.3"
 spring-boot = "3.3.1"
+jacksonKotlin="2.17.1"
+jakartaValidation="3.1.0-M2"
+kotlinVersion="2.0.0-RC2"
 
 
 [libraries]
+kotlin-reflect={module="org.jetbrains.kotlin:kotlin-reflect",version.ref="kotlinVersion"}
+kotlin-stdlib={module="org.jetbrains.kotlin:kotlin-stdlib-jdk8",version.ref="kotlinVersion"}
 ch-qos-logback-db-logback-classic-db = { module = "ch.qos.logback.db:logback-classic-db", version.ref = "ch-qos-logback-db-logback-classic-db" }
 io-jsonwebtoken-jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "io-jsonwebtoken-jjwt-api" }
 io-jsonwebtoken-jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "io-jsonwebtoken-jjwt-impl" }
 io-jsonwebtoken-jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "io-jsonwebtoken-jjwt-jackson" }
+jackson-module-kotlin={module="com.fasterxml.jackson.module:jackson-module-kotlin",version.ref="jacksonKotlin"}
+jakarta-validation-api={module="jakarta.validation:jakarta.validation-api", version.ref="jakartaValidation"}
 org-postgresql-postgresql = { module = "org.postgresql:postgresql", version.ref = "org-postgresql-postgresql" }
 org-springframework-boot-spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
 org-springframework-boot-spring-boot-starter-cache = { module = "org.springframework.boot:spring-boot-starter-cache", version.ref = "spring-boot" }
 org-springframework-boot-spring-boot-starter-web = {module="org.springframework.boot:spring-boot-starter-web",version.ref="spring-boot"}
+org-springframework-boot-spring-boot-starter-data-jdbc = {module="org.springframework.boot:spring-boot-starter-data-jdbc",version.ref="spring-boot"}
+org-springframework-boot-spring-boot-starter-validation={module="org.springframework.boot:spring-boot-starter-validation",version.ref="spring-boot"}
+org-springframework-boot-spring-boot-starter-security={module="org.springframework.boot:spring-boot-starter-security",version.ref="spring-boot"}

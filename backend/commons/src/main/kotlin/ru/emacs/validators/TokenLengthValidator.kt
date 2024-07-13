@@ -3,7 +3,7 @@ package ru.emacs.validators
 
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
-import ru.emacs.services.SecurityPropertiesService
+import ru.emacs.properties.services.SecurityPropertiesService
 import ru.emacs.validators.TokenLength.ValidatorType
 
 

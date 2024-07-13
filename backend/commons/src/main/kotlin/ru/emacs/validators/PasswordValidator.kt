@@ -6,8 +6,8 @@ import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import ru.emacs.models.SecurityProperties
-import ru.emacs.services.SecurityPropertiesService
+import ru.emacs.properties.models.SecurityProperties
+import ru.emacs.properties.services.SecurityPropertiesService
 
 import java.util.regex.Pattern
 
