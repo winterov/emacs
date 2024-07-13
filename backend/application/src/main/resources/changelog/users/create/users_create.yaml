@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/users/create/create-users-table.sql
+  - include:
+      file: db/changelog/users/create/create-roles-table.sql
+  - include:
+      file: db/changelog/users/create/create-authorities-table.sql
+  - include:
+      file: db/changelog/users/create/create-users-roles-table.sql
+  - include:
+      file: db/changelog/users/create/create-roles-authorities-table.sql
+  - include:
+      file: db/changelog/users/create/create-refresh-token-table.sql
+  - include:
+      file: db/changelog/users/create/create-change-psw-token-table.sql
+  - include:
+      file: db/changelog/users/create/create-email-approved-token-table.sql
+  - include:
+      file: db/changelog/users/create/create-employees-table.sql

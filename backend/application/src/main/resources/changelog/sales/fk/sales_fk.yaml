@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/sales/fk/add-fk-bank-accounts-customer.sql
+  - include:
+      file: db/changelog/sales/fk/add-fk-contacts-customers.sql
+  - include:
+      file: db/changelog/sales/fk/add-fk-contracts-customers.sql
