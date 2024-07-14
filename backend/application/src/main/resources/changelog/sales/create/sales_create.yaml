@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/sales/create/create-contracts-table.sql
+  - include:
+      file: db/changelog/sales/create/create-customers-table.sql
+  - include:
+      file: db/changelog/sales/create/create-contacts-table.sql
+  - include:
+      file: db/changelog/sales/create/create-bank-accounts-table.sql
+  - include:
+      file: db/changelog/sales/create/create-contacts-customers-table.sql

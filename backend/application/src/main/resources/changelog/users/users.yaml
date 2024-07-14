@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/users/create/users_create.yaml
+  - include:
+      file: db/changelog/users/fk/users_fk.yaml
+
+
