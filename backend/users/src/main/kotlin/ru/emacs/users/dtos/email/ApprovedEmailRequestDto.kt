@@ -1,22 +1,17 @@
 package ru.emacs.users.dtos.email
 
 
-import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.Size
+
+import jakarta.validation.constraints.NotBlank
 import ru.emacs.validators.TokenLength
 
 
-internal class ApprovedEmailRequestDto {
-    @field:Email(message = "Не валидный email")
-    @field:Size(
-        min = 5,
-        max = 50,
-        message = "Не валидный email"
-    )
-    var email: String? = null
+internal data class ApprovedEmailRequestDto(
+    @NotBlank
+    val email: String?,
 
     @field:TokenLength(
         type = TokenLength.ValidatorType.EMAIL_TOKEN
     )
-    var token: String? = null
-}
+    var token: String?
+)

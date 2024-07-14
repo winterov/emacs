@@ -18,8 +18,8 @@ internal class UsersPasswordControllerApiV1 @Autowired constructor(
     private val userPasswordService: UserPasswordService,
     private val validator: Validator
 ) {
-    @GetMapping("change/{email}")
-    fun requestForChangePassword(@PathVariable email: String): ResponseEntity<Any> {
+    @GetMapping("change")
+    fun requestForChangePassword(@RequestParam email: String): ResponseEntity<Any> {
         val emailValidator = EmailValidator()
         if (!emailValidator.isValid(email, null)) {
             val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST, "Аккаунт $email не существует")

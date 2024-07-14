@@ -1,16 +1,15 @@
-package ru.emacs.users
+package ru.emacs.properties
 
 import jakarta.annotation.PostConstruct
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 
-
 @Configuration
-@ComponentScan("ru.emacs.users")
-open class UsersModuleFactory {
+@ComponentScan("ru.emacs.properties")
+class PropertiesModuleConfiguration {
 
     @PostConstruct
     private fun greeting() {
-        println("Добро пожаловать в CosmoZooUser!")
+        println("Добро пожаловать в CosmoZooProperties!")
     }
 }

@@ -22,6 +22,7 @@ dependencies {
     implementation(libs.org.postgresql.postgresql)
     implementation(project(":properties"))
     implementation(project(":users"))
+    implementation(project(":commons"))
 }
 
 description = "application"

@@ -36,8 +36,8 @@ internal class UserEmailControllerApiV1 @Autowired constructor(
         return ResponseEntity(errorDto, HttpStatus.NOT_ACCEPTABLE)
     }
 
-    @GetMapping("check/{email}")
-    fun emailBusyCheck(@PathVariable email: String): ResponseEntity<Any> {
+    @GetMapping("check")
+    fun emailBusyCheck(@RequestParam email: String): ResponseEntity<Any> {
         val emailValidator = EmailValidator()
         if (!emailValidator.isValid(email, null)) {
             val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST, "Невалидные параметры запроса")

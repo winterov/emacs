@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  ru.emacs.users.UsersModuleFactory
+  ru.emacs.users.UsersModuleConfiguration

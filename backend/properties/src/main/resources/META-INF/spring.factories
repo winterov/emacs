@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  ru.emacs.properties.PropertiesModuleFactory
+  ru.emacs.properties.PropertiesModuleConfiguration
