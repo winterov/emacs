@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.jakarta.validation.api)
+    implementation(libs.liquibase.core)
     implementation(libs.ch.qos.logback.db.logback.classic.db)
     implementation(libs.org.postgresql.postgresql)
     implementation(project(":properties"))
