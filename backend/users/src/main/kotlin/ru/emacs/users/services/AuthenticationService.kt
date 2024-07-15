@@ -1,15 +1,17 @@
 package ru.emacs.users.services
 
-import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.HttpStatus
+import ru.emacs.users.dtos.auth.AuthRequestDto
 
 
-interface AuthenticationService {
+
+internal interface AuthenticationService {
     fun authentication(
-        emailOrPhone: String,
-        password: String,
+        authRequest: AuthRequestDto,
         response: HttpServletResponse
-    ): String?
+    ): Pair<Any, HttpStatus>
 
-    fun authenticationByRefreshToken(cookie: Cookie): String?
+    fun authenticationByRefreshToken(request: HttpServletRequest): Pair<Any, HttpStatus>
 }
