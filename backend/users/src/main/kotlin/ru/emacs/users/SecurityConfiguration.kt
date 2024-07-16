@@ -22,11 +22,11 @@ import ru.emacs.users.services.UserAccountService
 internal class SecurityConfiguration(private val jwtRequestFilter: JwtRequestFilter, private val userAccountDetailsService: UserAccountService) {
     @Bean
     @Throws(Exception::class)
-    open fun filterChain(http: HttpSecurity): SecurityFilterChain {
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
         val corsConfiguration = CorsConfiguration()
         corsConfiguration.allowedHeaders = listOf("Authorization", "Cache-Control", "Content-Type")
-        corsConfiguration.allowedOrigins = listOf("http://localhost:4200","http://localhost:80")
-        corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PUT", "OPTIONS", "PATCH", "DELETE")
+        corsConfiguration.allowedOrigins = listOf("http://localhost:5174","http://localhost:80")
+        corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH")
         corsConfiguration.allowCredentials = true
         corsConfiguration.exposedHeaders = listOf("Authorization")
         val source = UrlBasedCorsConfigurationSource()
