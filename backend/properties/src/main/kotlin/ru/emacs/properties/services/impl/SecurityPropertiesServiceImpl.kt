@@ -11,8 +11,8 @@ import ru.emacs.properties.services.PropertiesConverter
 import ru.emacs.properties.services.SecurityPropertiesService
 
 @Service
-internal open class SecurityPropertiesServiceImpl(private val converter: PropertiesConverter,
-                                                  private val propertiesRepository: PropertiesRepository
+internal class SecurityPropertiesServiceImpl(private val converter: PropertiesConverter,
+                                             private val propertiesRepository: PropertiesRepository
 ) : SecurityPropertiesService {
 
     @Cacheable(CacheConfiguration.SECURITY_PROPERTIES_CACHE)

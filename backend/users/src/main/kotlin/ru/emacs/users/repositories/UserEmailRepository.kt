@@ -12,8 +12,6 @@ internal interface UserEmailRepository {
 
     fun getVerifiedToken(email: String): EmailApprovedToken?
 
-    fun getVerifiedToken(userId: Long):EmailApprovedToken?
-
     fun updateUserEmailStatusByUserId(userId: Long, status: Boolean): Int
 
     fun countOfUsageEmail(email: String): Long

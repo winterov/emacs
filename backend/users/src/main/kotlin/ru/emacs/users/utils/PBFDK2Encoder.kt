@@ -12,7 +12,7 @@ import javax.crypto.spec.PBEKeySpec
 
 
 @Component
-class PBFDK2Encoder(private val securityPropertiesService: SecurityPropertiesService) : PasswordEncoder {
+internal class PBFDK2Encoder(private val securityPropertiesService: SecurityPropertiesService) : PasswordEncoder {
     companion object{
         private const val SECRET_KEY_INSTANCE = "PBKDF2WithHmacSHA512"
     }

@@ -13,6 +13,24 @@ import java.time.LocalDateTime
 
 @Repository
 internal class UserEmailRepositoryImpl(private val jdbcTemplate: NamedParameterJdbcTemplate) : UserEmailRepository {
+    companion object {
+        private const val DELETE_USED_TOKEN = "DELETE FROM email_approved_token as eat WHERE eat.userid=:id"
+        private const val INSERT_TOKEN =
+            "INSERT INTO email_approved_token (userid, token, expired, createdat) VALUES (:id,:token,:expired,:create) " +
+                    "ON CONFLICT (userId) DO UPDATE SET token=:token, expired = :expired, createdat =:create"
+
+        private const val VERIFIED_TOKEN_BY_EMAIL = "SELECT " +
+                "eat.token, eat.expired as token_expired, eat.createdat as token_created, " +
+                "u.is_email_verified as email_verified, u.e_status as user_status" +
+                " FROM users as u left join email_approved_token eat on u.id = eat.userid" +
+                " where u.email=:email"
+
+        private const val UPDATE_USER_EMAIL_STATUS =
+            "UPDATE users set is_email_verified=:status, updatedat=:updatedAt where id=:id"
+        private const val COUNT_USAGE_EMAIL = "SELECT COUNT(u.email) FROM users as u where u.email = :email;"
+    }
+
+
     override fun saveVerifiedEmailToken(userId: Long, token: String, expired: LocalDateTime): Int {
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
             .addValue("create", LocalDateTime.now())
@@ -34,11 +52,6 @@ internal class UserEmailRepositoryImpl(private val jdbcTemplate: NamedParameterJ
         return jdbcTemplate.query(VERIFIED_TOKEN_BY_EMAIL, namedParameters, EmailApprovedTokenExtractor())
     }
 
-    override fun getVerifiedToken(userId: Long):EmailApprovedToken? {
-        val namedParameters: SqlParameterSource = MapSqlParameterSource()
-            .addValue("id", userId)
-        return jdbcTemplate.query(VERIFIED_TOKEN_BY_USER_ID, namedParameters, EmailApprovedTokenExtractor())
-    }
 
     override fun updateUserEmailStatusByUserId(userId: Long, status: Boolean): Int {
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
@@ -55,24 +68,5 @@ internal class UserEmailRepositoryImpl(private val jdbcTemplate: NamedParameterJ
                 COUNT_USAGE_EMAIL,
                 namedParameters, Long::class.java
             )!!
-    }
-
-    companion object {
-        private const val DELETE_USED_TOKEN = "DELETE FROM email_approved_token as eat WHERE eat.userid=:id"
-        private const val INSERT_TOKEN =
-            "INSERT INTO email_approved_token (userid, token, expired, createdat) VALUES (:id,:token,:expired,:create) " +
-                    "ON CONFLICT (userId) DO UPDATE SET token=:token, expired = :expired, createdat =:create"
-
-        private const val VERIFIED_TOKEN_BY_EMAIL = "SELECT " +
-                "eat.token, eat.expired as token_expired, eat.createdat as token_created" +
-                " FROM users as u left join email_approved_token eat on u.id = eat.userid" +
-                " where u.email=:email"
-        private const val VERIFIED_TOKEN_BY_USER_ID = "SELECT eat.userid," +
-                "eat.token, eat.expired as token_expired, eat.createdat as token_created" +
-                " FROM email_approved_token eat " +
-                " where eat.userid=:id"
-        private const val UPDATE_USER_EMAIL_STATUS =
-            "UPDATE users set is_email_verified=:status, updatedat=:updatedAt where id=:id"
-        private const val COUNT_USAGE_EMAIL = "SELECT COUNT(u.email) FROM users as u where u.email = :email;"
     }
 }

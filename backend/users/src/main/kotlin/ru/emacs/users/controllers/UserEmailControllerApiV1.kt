@@ -1,7 +1,7 @@
 package ru.emacs.users.controllers
 
 
-import jakarta.validation.Validator
+
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -14,26 +14,12 @@ import ru.emacs.users.services.UserEmailService
 @RestController
 @RequestMapping("api/v1/users/email")
 internal class UserEmailControllerApiV1 @Autowired constructor(
-    private val validator: Validator,
     private val userEmailService: UserEmailService
 ) {
     @PutMapping("approved")
     fun approvedEmail(@RequestBody dto: ApprovedEmailRequestDto): ResponseEntity<Any> {
-        val violations = validator.validate(dto)
-        if (violations.isNotEmpty()) {
-            val errorMessage: MutableList<String> = ArrayList(4)
-            for (violation in violations) {
-                errorMessage.add(violation.message)
-            }
-            val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST, errorMessage)
-            return ResponseEntity(errorDto, HttpStatus.BAD_REQUEST)
-        }
-        val errorMessage = userEmailService.approvedUserEmail(dto.email!!, dto.token!!)
-        if (errorMessage.isEmpty()) {
-            return ResponseEntity.ok(null)
-        }
-        val errorDto = AppResponseErrorDto(HttpStatus.NOT_ACCEPTABLE, errorMessage)
-        return ResponseEntity(errorDto, HttpStatus.NOT_ACCEPTABLE)
+        val responseParam = userEmailService.approvedUserEmail(dto)
+        return ResponseEntity(responseParam.first,responseParam.second)
     }
 
     @GetMapping("check")

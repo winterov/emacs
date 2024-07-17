@@ -1,17 +1,23 @@
 package ru.emacs.users.services.impl
 
 
+import jakarta.validation.Validator
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.MessageSource
+import org.springframework.context.i18n.LocaleContextHolder
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import ru.emacs.dtos.AppResponseErrorDto
 import ru.emacs.properties.services.SecurityPropertiesService
 import ru.emacs.users.agregators.EUserStatus
-import ru.emacs.users.agregators.EmailApprovedToken
 import ru.emacs.users.agregators.UserAccount
+import ru.emacs.users.dtos.email.ApprovedEmailRequestDto
 import ru.emacs.users.repositories.UserEmailRepository
 import ru.emacs.users.services.UserEmailService
 import ru.emacs.users.utils.ApprovedTokenUtils
+import ru.emacs.validators.validateDto
 import java.time.LocalDateTime
 
 
@@ -20,37 +26,33 @@ internal class UserEmailServiceImpl @Autowired constructor(
     private val userEmailRepository: UserEmailRepository,
     private val userDetailsService: UserDetailsService,
     private val securityPropertiesService: SecurityPropertiesService,
+    private val validator: Validator,
+    private val messageSource: MessageSource,
 ) : UserEmailService {
     @Transactional
-    override fun generateVerifiedEmailToken(email: String): List<String> {
+    override fun generateVerifiedEmailTokenAndSend(email: String?): Pair<Any?, HttpStatus> {
+        if(email==null) return Pair(null, HttpStatus.BAD_REQUEST)
         val userAccount = userDetailsService.loadUserByUsername(email) as UserAccount?
-        val errorMessage: MutableList<String> = ArrayList()
-        if (userAccount == null) {
-            errorMessage.add("Неверные учетные данные")
-            return errorMessage
-        }
-        if (java.lang.Boolean.TRUE == userAccount.isEmailVerified) {
-            errorMessage.add("Email ${userAccount.email} уже подтвержден")
+        if (userAccount == null||userAccount.isEmailVerified) {
+            val notValidMessage:String =  messageSource.getMessage(
+                "{auth.notValidParams}",null,
+                LocaleContextHolder.getLocale())
+            val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
+            return Pair(errorDto,HttpStatus.BAD_REQUEST)
         }
         if (userAccount.status!! == EUserStatus.NEW_USER
             || userAccount.status!! == EUserStatus.ACTIVE
         ) {
-            errorMessage.add("Ваш аккаунт заблокирован. Обратитесь к администратору")
-            return errorMessage
+            val notValidMessage:String =  messageSource.getMessage(
+                "{auth.accountBlocked}",null,
+                LocaleContextHolder.getLocale())
+            val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
+            return Pair(errorDto,HttpStatus.BAD_REQUEST)
         }
-        val emailApprovedToken = userEmailRepository.getVerifiedToken(userAccount.id!!)
+        val emailApprovedToken = userEmailRepository.getVerifiedToken(userAccount.email!!)
         val securityProperties = securityPropertiesService.getSecurityProperty()
-        if (emailApprovedToken != null) {
-            val nextTokenTime = emailApprovedToken.createdAt.plus(
-                securityProperties.approvedEmailProperty.pauseBetweenNextTokenGenerate,
-                securityProperties.approvedEmailProperty.unit
-            )
-            if (nextTokenTime.isAfter(LocalDateTime.now())) {
-                errorMessage.add("Слишком частые запросы")
-            }
-        }
-        if (errorMessage.isNotEmpty()) {
-            return errorMessage
+        if (emailApprovedToken != null&&emailApprovedToken.expired.isBefore(LocalDateTime.now())) {
+            return Pair(null,HttpStatus.OK)
         }
         val token: String =
             ApprovedTokenUtils.generateApprovedToken(securityProperties.approvedEmailProperty.approvedEmailTokenLength)
@@ -59,39 +61,42 @@ internal class UserEmailServiceImpl @Autowired constructor(
             securityProperties.approvedEmailProperty.unit
         )
         userEmailRepository.saveVerifiedEmailToken(userAccount.id!!, token, expired)
-        val newToken = EmailApprovedToken(userAccount.id!!, token, LocalDateTime.now(), expired)
+       /* val newToken = EmailApprovedToken(userAccount.id!!, token, LocalDateTime.now(), expired)*/
         /*eventMulticaster.multicastEvent(UserEmailApprovedTokenEvent(userAccount))*/
-        return errorMessage
+        return Pair(null,HttpStatus.OK)
     }
 
     @Transactional
-    override fun approvedUserEmail(email: String, token: String): MutableList<String> {
-        TODO()
-        /*val userAccount = userEmailRepository.getVerifiedToken(email)
-        val errorMessage: MutableList<String> = ArrayList()
-        if (userAccount == null) {
-            errorMessage.add("Неверные учетные данные")
-            return errorMessage
+    override fun approvedUserEmail(dto: ApprovedEmailRequestDto): Pair<Any?, HttpStatus> {
+        val errors = validateDto(validator,dto)
+        if (errors.isNotEmpty()) {
+            val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST, errors)
+            return Pair(errorDto,HttpStatus.BAD_REQUEST)
         }
-        val emailApprovedToken = userEmailRepository.getVerifiedToken(userAccount.id!!)
-        if (emailApprovedToken == null || emailApprovedToken.token != token) {
-            errorMessage.add("Невалидный токен подтверждения")
+        val emailApprovedToken = userEmailRepository.getVerifiedToken(dto.email!!)
+        if (emailApprovedToken == null||
+            !emailApprovedToken.token.equals(dto.token)||
+            emailApprovedToken.isEmailVerified
+            ) {
+            val notValidMessage:String =  messageSource.getMessage(
+                "{validation.token}",null,
+                LocaleContextHolder.getLocale())
+            val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
+            return Pair(errorDto,HttpStatus.BAD_REQUEST)
         }
-        if (java.lang.Boolean.TRUE == userAccount.getIsEmailVerified()) {
-            errorMessage.add("Email $email уже подтвержден")
-        }
-        if (!(userAccount.getStatus().equals(EUserStatus.NEW_USER)
-                    || userAccount.getStatus().equals(EUserStatus.ACTIVE))
+        if (!(emailApprovedToken.userStatus == EUserStatus.NEW_USER
+                    || emailApprovedToken.userStatus == EUserStatus.ACTIVE)
         ) {
-            errorMessage.add("Ваш аккаунт заблокирован. Обратитесь к администратору")
+            val notValidMessage:String =  messageSource.getMessage(
+                "{auth.accountBlocked}",null,
+                LocaleContextHolder.getLocale())
+            val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
+            return Pair(errorDto,HttpStatus.BAD_REQUEST)
         }
-        if (!errorMessage.isEmpty()) {
-            return errorMessage
-        }
-        userEmailRepository.updateUserEmailStatusByUserId(userAccount.getId(), true)
-        userEmailRepository.deleteUsedEmailApprovedTokenByUserId(userAccount.getId())
-        eventMulticaster.multicastEvent(UserAccountChangeEvent(email))
-        return errorMessage*/
+        userEmailRepository.updateUserEmailStatusByUserId(emailApprovedToken.userId, true)
+        userEmailRepository.deleteUsedEmailApprovedTokenByUserId(emailApprovedToken.userId)
+        /*eventMulticaster.multicastEvent(UserAccountChangeEvent(email))*/
+        return Pair(null,HttpStatus.OK)
     }
 
     @Transactional

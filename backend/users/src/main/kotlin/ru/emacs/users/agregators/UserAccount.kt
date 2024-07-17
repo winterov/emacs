@@ -19,8 +19,8 @@ internal class UserAccount : UserDetails {
     var roles: MutableSet<AppRole> = HashSet()
 
 
-    override fun getAuthorities(): Collection<ru.emacs.users.agregators.AppAuthority> {
-        val authorities:MutableSet<ru.emacs.users.agregators.AppAuthority> = HashSet()
+    override fun getAuthorities(): Collection<AppAuthority> {
+        val authorities:MutableSet<AppAuthority> = HashSet()
         roles.forEach{
             it.authorities.forEach{ auth->
                 authorities.add(auth)
@@ -56,9 +56,7 @@ internal class UserAccount : UserDetails {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
-
         other as UserAccount
-
         return id == other.id
     }
 

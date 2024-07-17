@@ -6,6 +6,4 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ComponentScan("ru.emacs.users")
-class UsersModuleConfiguration {
-
-}
+internal class UsersModuleConfiguration

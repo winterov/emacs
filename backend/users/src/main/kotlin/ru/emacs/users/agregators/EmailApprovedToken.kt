@@ -4,8 +4,10 @@ import java.time.LocalDateTime
 
 
 internal data class EmailApprovedToken(
-    var userId: Long,
-    var token: String?,
-    var createdAt: LocalDateTime,
-    var expired: LocalDateTime,
+    val userId: Long,
+    val isEmailVerified: Boolean,
+    val userStatus: EUserStatus,
+    val token: String?,
+    val createdAt: LocalDateTime,
+    val expired: LocalDateTime,
 )

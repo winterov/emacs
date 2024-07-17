@@ -1,10 +1,11 @@
 package ru.emacs.users.services
 
-
+import org.springframework.http.HttpStatus
+import ru.emacs.users.dtos.email.ApprovedEmailRequestDto
 
 
 internal interface UserEmailService {
-    fun approvedUserEmail(email: String, token: String): List<String>
-    fun generateVerifiedEmailToken(email: String): List<String>
+    fun approvedUserEmail(dto: ApprovedEmailRequestDto): Pair<Any?, HttpStatus>
+    fun generateVerifiedEmailTokenAndSend(email: String?): Pair<Any?, HttpStatus>
     fun emailBusyCheck(email: String): Boolean
 }

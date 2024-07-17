@@ -4,6 +4,7 @@ package ru.emacs.users
 
 
 import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.MalformedJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
@@ -44,6 +45,9 @@ internal class JwtRequestFilter @Autowired constructor(private val jwtTokenUtil:
             } catch (e: MalformedJwtException) {
                 logger.error("RefreshToken not valid")
                  throw org.springframework.security.access.AccessDeniedException("Токен авторизации не валиден")
+            }catch (e: JwtException){
+                logger.error(e.message+"token: $jwt")
+                throw org.springframework.security.access.AccessDeniedException("Токен авторизации не валиден")
             }
         }
 

@@ -333,6 +333,19 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Properties",
+			"item": [
+				{
+					"name": "password properties",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

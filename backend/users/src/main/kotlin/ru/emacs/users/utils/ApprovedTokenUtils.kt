@@ -3,7 +3,7 @@ package ru.emacs.users.utils
 import java.security.SecureRandom
 import java.util.*
 
-object ApprovedTokenUtils {
+internal object ApprovedTokenUtils {
 
     fun generateApprovedToken(targetStringLength: Int): String {
         val leftLimit = 48 /* numeral '0'*/

@@ -55,6 +55,6 @@ internal class UserRegistrationServiceImpl @Autowired constructor(
         userAccount.status = EUserStatus.NEW_USER
         userAccount.credentialExpiredTime = credentialExpired
         userAccount.createdAt = createdAt
-        userEmailService.generateVerifiedEmailToken(email)
+        userEmailService.generateVerifiedEmailTokenAndSend(email)
     }
 }

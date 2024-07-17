@@ -25,13 +25,13 @@ class SecurityProperties {
     /*Если значение установлено в 0, то при валидации не используется*/
 
     class UserPasswordStrength {
-        var passwordExpired = 0L
+        var passwordExpired = 6L
         var unit = ChronoUnit.MONTHS
-        var passwordMinLowerCase = 0 /*Минимальное количество прописных символов*/
-        var passwordMinNumber = 0 /*Минимальное количество цифр*/
-        var passwordMinSymbol = 0 /*Минимальное количество спец символов*/
-        var passwordMinUpperCase = 0 /*Минимальное количество заглавных символов*/
-        var passwordMinCharacters = 0 /*Минимальная длина пароля*/
+        var passwordMinLowerCase = 2 /*Минимальное количество прописных символов*/
+        var passwordMinNumber = 2 /*Минимальное количество цифр*/
+        var passwordMinSymbol = 2 /*Минимальное количество спец символов*/
+        var passwordMinUpperCase = 2 /*Минимальное количество заглавных символов*/
+        var passwordMinCharacters = 2 /*Минимальная длина пароля*/
     }
 
 
