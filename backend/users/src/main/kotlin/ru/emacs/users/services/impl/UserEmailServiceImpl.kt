@@ -44,7 +44,7 @@ internal class UserEmailServiceImpl @Autowired constructor(
             || userAccount.status!! == EUserStatus.ACTIVE
         ) {
             val notValidMessage:String =  messageSource.getMessage(
-                "{auth.accountBlocked}",null,
+                "auth.accountBlocked",null,
                 LocaleContextHolder.getLocale())
             val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
             return Pair(errorDto,HttpStatus.BAD_REQUEST)
