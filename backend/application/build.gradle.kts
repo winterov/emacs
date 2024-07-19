@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":properties"))
     implementation(project(":users"))
     implementation(project(":commons"))
+
 }
 
 description = "application"

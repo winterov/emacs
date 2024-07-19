@@ -14,6 +14,14 @@ class PhoneNumberValidator : ConstraintValidator<PhoneNumber, String?> {
         if (!required && contactField.isNullOrEmpty()) {
             return true
         }
-        return contactField != null && contactField.length == 12 && contactField.matches("^\\+\\d{11}".toRegex())
+        if (contactField!=null) {
+            if(contactField.length == 12){
+                if(contactField.matches("^\\+\\d{11}".toRegex())){
+                    return true
+                }
+            }
+        }
+        return false
+       /* return contactField != null && contactField.length == 12 && contactField.matches("^\\+\\d{11}".toRegex())*/
     }
 }

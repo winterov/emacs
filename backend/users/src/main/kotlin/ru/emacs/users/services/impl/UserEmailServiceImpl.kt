@@ -2,10 +2,12 @@ package ru.emacs.users.services.impl
 
 
 import jakarta.validation.Validator
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -35,7 +37,7 @@ internal class UserEmailServiceImpl @Autowired constructor(
         val userAccount = userDetailsService.loadUserByUsername(email) as UserAccount?
         if (userAccount == null||userAccount.isEmailVerified) {
             val notValidMessage:String =  messageSource.getMessage(
-                "{auth.notValidParams}",null,
+                "auth.notValidParams",null,
                 LocaleContextHolder.getLocale())
             val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
             return Pair(errorDto,HttpStatus.BAD_REQUEST)
@@ -79,7 +81,7 @@ internal class UserEmailServiceImpl @Autowired constructor(
             emailApprovedToken.isEmailVerified
             ) {
             val notValidMessage:String =  messageSource.getMessage(
-                "{validation.token}",null,
+                "validation.token",null,
                 LocaleContextHolder.getLocale())
             val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
             return Pair(errorDto,HttpStatus.BAD_REQUEST)
@@ -100,7 +102,23 @@ internal class UserEmailServiceImpl @Autowired constructor(
     }
 
     @Transactional
-    override fun emailBusyCheck(email: String): Boolean {
-        return userEmailRepository.countOfUsageEmail(email) > 0
+    override fun emailBusyCheck(email: String): Pair<Any?, HttpStatus> {
+        val emailValidator = EmailValidator()
+        if (!emailValidator.isValid(email, null)) {
+            val notValidMessage:String =  messageSource.getMessage(
+                "validation.email.NotValid",null,
+                LocaleContextHolder.getLocale())
+            val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST, notValidMessage)
+            return Pair(errorDto, HttpStatus.BAD_REQUEST)
+        }
+        val statuses = listOf(EUserStatus.NEW_USER,EUserStatus.ACTIVE)
+        if(userEmailRepository.countOfUsageEmail(email,statuses) > 0){
+            val notValidMessage:String =  messageSource.getMessage(
+                "email.emailIsBusy",null,
+                LocaleContextHolder.getLocale())
+            val errorDto = AppResponseErrorDto(HttpStatus.CONFLICT, notValidMessage)
+            return Pair(errorDto, HttpStatus.CONFLICT)
+        }
+        return Pair(null, HttpStatus.OK)
     }
 }

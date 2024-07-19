@@ -12,6 +12,7 @@ jacksonKotlin="2.17.1"
 jakarta="3.1.0-M2"
 kotlinVersion="2.0.0-RC2"
 liquibase="4.27.0"
+testJunit = "5.9.2"
 
 [libraries]
 kotlin-reflect={module="org.jetbrains.kotlin:kotlin-reflect",version.ref="kotlinVersion"}
@@ -30,3 +31,4 @@ org-springframework-boot-spring-boot-starter-web = {module="org.springframework.
 org-springframework-boot-spring-boot-starter-data-jdbc = {module="org.springframework.boot:spring-boot-starter-data-jdbc",version.ref="spring-boot"}
 org-springframework-boot-spring-boot-starter-validation={module="org.springframework.boot:spring-boot-starter-validation",version.ref="spring-boot"}
 org-springframework-boot-spring-boot-starter-security={module="org.springframework.boot:spring-boot-starter-security",version.ref="spring-boot"}
+test-junit = {module='org.junit.jupiter:junit-jupiter-api', version.ref="testJunit" }

@@ -2,6 +2,7 @@ package ru.emacs.users.repositories
 
 
 
+import ru.emacs.users.agregators.EUserStatus
 import ru.emacs.users.agregators.EmailApprovedToken
 import java.time.LocalDateTime
 
@@ -14,5 +15,5 @@ internal interface UserEmailRepository {
 
     fun updateUserEmailStatusByUserId(userId: Long, status: Boolean): Int
 
-    fun countOfUsageEmail(email: String): Long
+    fun countOfUsageEmail(email: String,statuses:List<EUserStatus>): Long
 }

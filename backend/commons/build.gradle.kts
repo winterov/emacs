@@ -20,6 +20,8 @@ dependencies {
     compileOnly(libs.kotlin.stdlib)
     compileOnly(libs.kotlin.reflect)
     compileOnly(project(":properties"))
+    testImplementation(libs.test.junit)
+    testImplementation(libs.org.springframework.boot.spring.boot.starter.validation)
 }
 
 description = "commons"

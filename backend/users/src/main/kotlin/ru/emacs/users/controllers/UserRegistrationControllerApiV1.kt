@@ -17,28 +17,11 @@ import ru.emacs.users.services.UserRegistrationService
 @RequestMapping("api/v1/users/registration")
 internal class UserRegistrationControllerApiV1
     (
-    private val validator: Validator,
     private val userRegistrationService: UserRegistrationService
     ) {
         @PostMapping
         fun registration(@RequestBody dto: UserRegistrationRequestDto): ResponseEntity<Any> {
-            val violations = validator.validate(dto)
-            if (violations.isNotEmpty()) {
-                val errorMessage: MutableList<String> = ArrayList(6)
-                for (violation in violations) {
-                    errorMessage.add(violation.message)
-                }
-                val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST, errorMessage)
-                return ResponseEntity(errorDto, HttpStatus.BAD_REQUEST)
-            }
-            userRegistrationService.createNewUserAccount(
-                dto.email!!,
-                dto.phone,
-                dto.password!!,
-                dto.name!!,
-                dto.surname!!,
-                dto.lastname
-            )
-            return ResponseEntity.ok(null)
+            val responseParam = userRegistrationService.createNewUserAccount(dto)
+            return ResponseEntity(responseParam.first,responseParam.second)
         }
 }

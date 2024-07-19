@@ -8,7 +8,6 @@ import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import javax.sql.DataSource
 
-
 @Configuration
 @EnableTransactionManagement
 @EnableJdbcRepositories(basePackages = ["ru.emacs"])

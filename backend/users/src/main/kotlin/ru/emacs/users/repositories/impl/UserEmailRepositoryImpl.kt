@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.core.namedparam.SqlParameterSource
 import org.springframework.stereotype.Repository
+import ru.emacs.users.agregators.EUserStatus
 import ru.emacs.users.agregators.EmailApprovedToken
 import ru.emacs.users.repositories.UserEmailRepository
 import ru.emacs.users.repositories.extractors.EmailApprovedTokenExtractor
@@ -27,7 +28,9 @@ internal class UserEmailRepositoryImpl(private val jdbcTemplate: NamedParameterJ
 
         private const val UPDATE_USER_EMAIL_STATUS =
             "UPDATE users set is_email_verified=:status, updatedat=:updatedAt where id=:id"
-        private const val COUNT_USAGE_EMAIL = "SELECT COUNT(u.email) FROM users as u where u.email = :email;"
+
+        private const val COUNT_USAGE_EMAIL = "SELECT COUNT(u.email) " +
+                "FROM users as u where u.email = :email and u.e_status in (:statuses);"
     }
 
 
@@ -60,9 +63,11 @@ internal class UserEmailRepositoryImpl(private val jdbcTemplate: NamedParameterJ
         return jdbcTemplate.update(UPDATE_USER_EMAIL_STATUS, namedParameters)
     }
 
-    override fun countOfUsageEmail(email: String): Long {
+    override fun countOfUsageEmail(email: String,statuses:List<EUserStatus>): Long {
+        val statusesStrings = statuses.stream().map { it.toString() }.toList()
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
             .addValue("email", email)
+            .addValue("statuses",statusesStrings)
         return jdbcTemplate
             .queryForObject(
                 COUNT_USAGE_EMAIL,

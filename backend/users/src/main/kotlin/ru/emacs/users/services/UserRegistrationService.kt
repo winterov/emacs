@@ -1,16 +1,11 @@
 package ru.emacs.users.services
 
-
-
+import org.springframework.http.HttpStatus
+import ru.emacs.users.dtos.profile.request.UserRegistrationRequestDto
 
 
 internal interface UserRegistrationService {
     fun createNewUserAccount(
-        email: String,
-        phone: String?,
-        password: String,
-        name: String,
-        surname: String,
-        lastname: String?
-    )
+        dto: UserRegistrationRequestDto
+    ): Pair<Any?, HttpStatus>
 }
