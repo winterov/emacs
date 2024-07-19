@@ -23,6 +23,7 @@
             <option value="$PROJECT_DIR$/backend/application" />
             <option value="$PROJECT_DIR$/backend/buildSrc" />
             <option value="$PROJECT_DIR$/backend/commons" />
+            <option value="$PROJECT_DIR$/backend/notification" />
             <option value="$PROJECT_DIR$/backend/properties" />
             <option value="$PROJECT_DIR$/backend/users" />
           </set>

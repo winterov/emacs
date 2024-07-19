@@ -6,7 +6,6 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
-    kotlin("plugin.jpa") version "1.9.22"
 }
 
 dependencies {
@@ -14,6 +13,7 @@ dependencies {
     implementation(libs.org.springframework.boot.spring.boot.starter.data.jdbc)
     implementation(libs.org.springframework.boot.spring.boot.starter.validation)
     implementation(libs.org.springframework.boot.spring.boot.starter.security)
+    compileOnly(libs.org.springframework.boot.spring.boot.starter.mail)
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.reflect)
     implementation(libs.jackson.module.kotlin)

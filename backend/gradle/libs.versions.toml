@@ -31,4 +31,5 @@ org-springframework-boot-spring-boot-starter-web = {module="org.springframework.
 org-springframework-boot-spring-boot-starter-data-jdbc = {module="org.springframework.boot:spring-boot-starter-data-jdbc",version.ref="spring-boot"}
 org-springframework-boot-spring-boot-starter-validation={module="org.springframework.boot:spring-boot-starter-validation",version.ref="spring-boot"}
 org-springframework-boot-spring-boot-starter-security={module="org.springframework.boot:spring-boot-starter-security",version.ref="spring-boot"}
+org-springframework-boot-spring-boot-starter-mail={module="org.springframework.boot:spring-boot-starter-mail",version.ref="spring-boot"}
 test-junit = {module='org.junit.jupiter:junit-jupiter-api', version.ref="testJunit" }
