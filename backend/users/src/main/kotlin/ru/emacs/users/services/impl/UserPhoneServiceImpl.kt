@@ -26,7 +26,7 @@ internal class UserPhoneServiceImpl @Autowired constructor(
             val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
             return Pair(errorDto,HttpStatus.BAD_REQUEST)
         }
-        if(userPhoneRepository.countOfUsageEmail(phoneNumber,statuses) > 0){
+        if(userPhoneRepository.countOfUsagePhone(phoneNumber,statuses) > 0){
             val notValidMessage:String =  messageSource.getMessage(
                 "phone.phoneIsBusy",null,
                 LocaleContextHolder.getLocale())

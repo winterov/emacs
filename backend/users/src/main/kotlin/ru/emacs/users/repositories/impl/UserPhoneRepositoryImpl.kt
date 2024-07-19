@@ -15,7 +15,7 @@ internal class UserPhoneRepositoryImpl(private val jdbcTemplate: NamedParameterJ
         private const val COUNT_USAGE_PHONE = "SELECT COUNT(u.phone) " +
                 "FROM users as u where u.phone = :phone and u.e_status in (:statuses);"
     }
-    override fun countOfUsageEmail(phone: String, statuses: List<EUserStatus>): Long {
+    override fun countOfUsagePhone(phone: String, statuses: List<EUserStatus>): Long {
         val statusesStrings = statuses.stream().map { it.toString() }.toList()
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
             .addValue("phone", phone)
