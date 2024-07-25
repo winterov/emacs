@@ -19,7 +19,10 @@ dependencies {
     compileOnly(libs.kotlin.stdlib)
     compileOnly(libs.kotlin.reflect)
     compileOnly(libs.jackson.module.kotlin)
+    compileOnly(libs.apache.tika)
+    compileOnly(project(":commons"))
     testImplementation(kotlin("test"))
+
 }
 
 tasks.test {
