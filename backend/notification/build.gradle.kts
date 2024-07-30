@@ -20,7 +20,9 @@ dependencies {
     compileOnly(libs.kotlin.reflect)
     compileOnly(libs.jackson.module.kotlin)
     compileOnly(libs.apache.tika)
+    compileOnly(libs.jsoup)
     compileOnly(project(":commons"))
+    compileOnly(project(":properties"))
     testImplementation(kotlin("test"))
 
 }

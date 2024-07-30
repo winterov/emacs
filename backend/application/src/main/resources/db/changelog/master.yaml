@@ -6,4 +6,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/sales/sales.yaml
   - include:
+      file: db/changelog/notification/notification.yaml
+  - include:
       file: db/changelog/complete-test/complete-test.yaml
