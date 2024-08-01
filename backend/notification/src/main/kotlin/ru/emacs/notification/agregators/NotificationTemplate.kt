@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 data class NotificationTemplate(
     @field:Id val id:Long,
     val eventClass:Class<*>,
+    val handlerClass:Class<*>,
     val template:String,
     val isEnabled:Boolean,
     val createdAt:LocalDateTime,
