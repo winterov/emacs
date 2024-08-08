@@ -9,6 +9,7 @@ internal class HtmlBodyProviderImpl: HtmlBodyProvider {
     override fun provide(htmlBody: String, params: Map<String, String>): String {
         val template: Document = Jsoup.parse(htmlBody)
         val document = template.clone()
+
         return document.toString()
     }
 }
