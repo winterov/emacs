@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.ch.qos.logback.db.logback.classic.db)
     implementation(libs.org.postgresql.postgresql)
     implementation(libs.apache.tika)
+    implementation(project(":notification"))
     implementation(project(":properties"))
     implementation(project(":users"))
     implementation(project(":commons"))

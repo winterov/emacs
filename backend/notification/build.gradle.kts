@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    compileOnly(libs.org.springframework.boot.spring.boot.starter.web)
     compileOnly(libs.org.springframework.boot.spring.boot.starter.data.jdbc)
     compileOnly(libs.org.springframework.boot.spring.boot.starter.validation)
     compileOnly(libs.org.springframework.boot.spring.boot.starter.mail)

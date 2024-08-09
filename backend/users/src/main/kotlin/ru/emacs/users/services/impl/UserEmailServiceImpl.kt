@@ -5,13 +5,15 @@ import jakarta.validation.Validator
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
+import org.springframework.context.event.ApplicationEventMulticaster
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.emacs.dtos.AppResponseErrorDto
+import ru.emacs.events.users.UserAccountWithToken
+import ru.emacs.events.users.UserEmailApprovedTokenSend
 import ru.emacs.properties.services.SecurityPropertiesService
 import ru.emacs.users.agregators.EUserStatus
 import ru.emacs.users.agregators.UserAccount
@@ -30,6 +32,7 @@ internal class UserEmailServiceImpl @Autowired constructor(
     private val securityPropertiesService: SecurityPropertiesService,
     private val validator: Validator,
     private val messageSource: MessageSource,
+    private val eventMulticaster: ApplicationEventMulticaster
 ) : UserEmailService {
     @Transactional
     override fun generateVerifiedEmailTokenAndSend(email: String?): Pair<Any?, HttpStatus> {
@@ -42,8 +45,8 @@ internal class UserEmailServiceImpl @Autowired constructor(
             val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
             return Pair(errorDto,HttpStatus.BAD_REQUEST)
         }
-        if (userAccount.status!! == EUserStatus.NEW_USER
-            || userAccount.status!! == EUserStatus.ACTIVE
+        if (userAccount.status == EUserStatus.NEW_USER
+            || userAccount.status == EUserStatus.ACTIVE
         ) {
             val notValidMessage:String =  messageSource.getMessage(
                 "auth.accountBlocked",null,
@@ -63,8 +66,7 @@ internal class UserEmailServiceImpl @Autowired constructor(
             securityProperties.approvedEmailProperty.unit
         )
         userEmailRepository.saveVerifiedEmailToken(userAccount.id!!, token, expired)
-       /* val newToken = EmailApprovedToken(userAccount.id!!, token, LocalDateTime.now(), expired)*/
-        /*eventMulticaster.multicastEvent(UserEmailApprovedTokenEvent(userAccount))*/
+        eventMulticaster.multicastEvent(UserEmailApprovedTokenSend(UserAccountWithToken(email,userAccount.phone,null,null,token)))
         return Pair(null,HttpStatus.OK)
     }
 
@@ -77,8 +79,7 @@ internal class UserEmailServiceImpl @Autowired constructor(
         }
         val emailApprovedToken = userEmailRepository.getVerifiedToken(dto.email!!)
         if (emailApprovedToken == null||
-            !emailApprovedToken.token.equals(dto.token)||
-            emailApprovedToken.isEmailVerified
+            !emailApprovedToken.token.equals(dto.token)
             ) {
             val notValidMessage:String =  messageSource.getMessage(
                 "validation.token",null,
@@ -86,18 +87,26 @@ internal class UserEmailServiceImpl @Autowired constructor(
             val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
             return Pair(errorDto,HttpStatus.BAD_REQUEST)
         }
-        if (!(emailApprovedToken.userStatus == EUserStatus.NEW_USER
-                    || emailApprovedToken.userStatus == EUserStatus.ACTIVE)
-        ) {
+        val userAccount = userDetailsService.loadUserByUsername(dto.email) as UserAccount?
+        if (userAccount != null) {
+            if (!(userAccount.status == EUserStatus.NEW_USER
+                        || userAccount.status == EUserStatus.ACTIVE)
+            ) {
+                val notValidMessage:String =  messageSource.getMessage(
+                    "{auth.accountBlocked}",null,
+                    LocaleContextHolder.getLocale())
+                val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
+                return Pair(errorDto,HttpStatus.BAD_REQUEST)
+            }
+        }else{
             val notValidMessage:String =  messageSource.getMessage(
-                "{auth.accountBlocked}",null,
+                "validation.token",null,
                 LocaleContextHolder.getLocale())
             val errorDto = AppResponseErrorDto(HttpStatus.BAD_REQUEST,notValidMessage )
             return Pair(errorDto,HttpStatus.BAD_REQUEST)
         }
         userEmailRepository.updateUserEmailStatusByUserId(emailApprovedToken.userId, true)
         userEmailRepository.deleteUsedEmailApprovedTokenByUserId(emailApprovedToken.userId)
-        /*eventMulticaster.multicastEvent(UserAccountChangeEvent(email))*/
         return Pair(null,HttpStatus.OK)
     }
 

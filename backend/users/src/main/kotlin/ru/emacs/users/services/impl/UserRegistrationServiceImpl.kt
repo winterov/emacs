@@ -5,6 +5,7 @@ package ru.emacs.users.services.impl
 import jakarta.validation.Validator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
+import org.springframework.context.event.ApplicationEventMulticaster
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import ru.emacs.dtos.AppResponseErrorDto
@@ -29,7 +30,8 @@ internal class UserRegistrationServiceImpl @Autowired constructor(
     private val roleService: RoleService,
     private val securityPropertiesService: SecurityPropertiesService,
     private val validator: Validator,
-    private val messageSource: MessageSource
+    private val messageSource: MessageSource,
+    private val simpleApplicationEventMulticaster: ApplicationEventMulticaster
 ) : UserRegistrationService {
 
     override fun createNewUserAccount(dto: UserRegistrationRequestDto): Pair<Any?, HttpStatus> {

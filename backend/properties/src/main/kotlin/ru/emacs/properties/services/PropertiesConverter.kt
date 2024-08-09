@@ -22,7 +22,7 @@ internal class PropertiesConverter {
     }
 
 
-    fun <T>convertFromJson(s: String, tClass: Class<T>): T {
+    fun <T> convertFromJson(s: String, tClass: Class<T>): T {
         var property: T?=null
         try {
             property = objectMapper.readValue(s, tClass) as T

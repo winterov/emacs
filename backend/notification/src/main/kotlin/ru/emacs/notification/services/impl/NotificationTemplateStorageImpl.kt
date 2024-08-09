@@ -14,7 +14,7 @@ internal class NotificationTemplateStorageImpl @Autowired constructor(
 ): NotificationTemplateStorage {
 
     @Cacheable("getNotificationTemplate")
-    override fun getTemplate(event: ApplicationEvent):List<NotificationTemplate> {
+    override fun getEnabledTemplate(event: ApplicationEvent):List<NotificationTemplate> {
        return notificationTemplateRepository.findByEventClassAndEnabled(event.javaClass,true)
     }
 }

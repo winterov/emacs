@@ -13,7 +13,7 @@ import ru.emacs.properties.repositories.extractors.EmailRowMapper
 class EmailSettingsRepositoryImpl(private val jdbcTemplate: NamedParameterJdbcTemplate): EmailSettingsRepository {
     companion object{
         @Language("PostgreSQL")
-        private const val GET_EMAIL_SETTINGS = "SELECT * FROM email_properties WHERE is_enabled=:enabled"
+        private const val GET_EMAIL_SETTINGS = "SELECT * FROM email_properties as prop WHERE prop.is_enabled=:enabled"
     }
     override fun getSettings(isEnabled: Boolean): List<EmailSettings> {
         val namedParameters: SqlParameterSource = MapSqlParameterSource()

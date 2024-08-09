@@ -1,9 +1,15 @@
 package ru.emacs.properties.models
 
+import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Column
+import org.springframework.data.relational.core.mapping.Table
 
+@Table(name="email_settings")
 class EmailSettings {
+    @field:Id
     var id: Long =0
     lateinit var type: EEmailType
+    @field:Column("is_enabled")
     var isEnabled: Boolean=false
     lateinit var description: String
     lateinit var email: String

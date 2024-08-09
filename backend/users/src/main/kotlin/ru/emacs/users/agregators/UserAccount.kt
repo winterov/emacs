@@ -9,7 +9,7 @@ internal class UserAccount : UserDetails {
     var id: Long? = null
     var email: String? = null
     var isEmailVerified: Boolean = false
-    var status: EUserStatus? = null
+    var status: EUserStatus = EUserStatus.NEW_USER
     var phone: String? = null
     var isPhoneVerified: Boolean = false
     var psword: String? = null
