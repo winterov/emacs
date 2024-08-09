@@ -30,9 +30,9 @@ internal class EmailRowMapper : RowMapper<EmailSettings> {
             emailSettings.incomingServer.serverType =
                 EmailSettings.IncomingServerType.valueOf(serverType)
         }
-        emailSettings.incomingServer.imapServer = rs.getString("incoming_server_imap_server")
-        emailSettings.incomingServer.enabledSSL = rs.getBoolean("incoming_server_enabled_ssl")
-        emailSettings.incomingServer.portSSL = rs.getInt("incoming_server_port_ssl")
+        emailSettings.incomingServer.imapServer = rs.getString("incoming_imap_server")
+        emailSettings.incomingServer.enabledSSL = rs.getBoolean("incoming_enabled_ssl")
+        emailSettings.incomingServer.portSSL = rs.getInt("incoming_port_ssl")
         emailSettings.incomingServer.connectionTimeout = rs.getInt("incoming_server_connection_timeout")
         emailSettings.incomingServer.timeout = rs.getInt("incoming_server_timeout")
         return emailSettings

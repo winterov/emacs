@@ -4,5 +4,5 @@ import org.springframework.data.repository.CrudRepository
 import ru.emacs.notification.agregators.NotificationTemplate
 
 internal interface NotificationTemplateRepository: CrudRepository<NotificationTemplate,Long> {
-    fun findByEventClassAndEnabled(eventClass:Class<*>,isEnabled:Boolean): List<NotificationTemplate>
+    fun findByEventClassAndActual(eventClass:Class<*>,actual:Boolean): List<NotificationTemplate>
 }
